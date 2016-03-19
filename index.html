@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>WhatsTheDigit</title>
+    <script src="https://code.createjs.com/easeljs-0.8.2.min.js"></script>
+	<script type="text/javascript" src="js/main.js"></script>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="">
+</head>
+<body onload="init();" class="white darken-1">
+    <nav class="blue darken-4" role="navigation">
+        <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo white-text">WhatsTheDigit</a>
+            <ul class="right hide-on-med-and-down">
+                <li><a href="#">About</a></li>
+            </ul>
+
+            <ul id="nav-mobile" class="side-nav" style="left: -250px;">
+                <li><a href="#">About</a></li>
+            </ul>
+            <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="row">
+            <div class="card col m8 offset-m2">
+                <div class="card-content">
+                    <span class="card-title">Handwritten digit recognition</span>
+                    <p>
+                        Use the canvas below to draw a digit between 0 and 9. The digit should be centered in the canvas.
+                    </p>
+                    <div class="row">
+                        <div class="center">
+                            <canvas id="canvasStage" class="center grey lighten-2" width="224" height="224"></canvas>
+                        </div>
+                        <canvas id="scaledCanvas" class="grey lighten-2" width="28" height="28" hidden></canvas>
+                    </div>
+                    <div class="row">
+                        <div class="center">
+                            <button class="btn waves-effect waves-light blue darken-4" id="clearCanvas" onclick="clearCanvas();">Clear Canvas</button>
+                            <button class="btn waves-effect waves-light blue darken-4" id="submitDigit" onclick="submitDigit();">do the thing!</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
