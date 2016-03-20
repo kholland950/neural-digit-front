@@ -10,7 +10,9 @@ var oldX, oldY;
 var color = "#111";
 var size = 25;
 
-var NN_URL = "url here";
+var changed = false;
+
+var NN_URL = undefined; //URL here
 
 function init() {
     $('.button-collapse').sideNav();
@@ -28,6 +30,7 @@ function init() {
     createjs.Touch.enable(stage);
 
     shape = new createjs.Shape();
+    shape.shadow = new createjs.Shadow("#111", 0, 0, 2);
     var drawing = false;
 
     stage.addChild(shape);
@@ -41,6 +44,7 @@ function init() {
         oldX = event.stageX;
         oldY = event.stageY;
         drawing = true;
+        changed = true;
     });
 
     stage.on("stagemousemove",function(evt) {
@@ -59,26 +63,31 @@ function init() {
 }
 
 function submitDigit() {
-    var imageData = $("#canvasStage")[0].getContext("2d").getImageData(0,0,224,224);
-    imageData = scaleImage(imageData);
-    var normAlphaData = normalize(getAlphas(imageData));
-    var reqData = {
-        pixels: normAlphaData
-    };
-    console.log(reqData);
-    $.ajax({
-        method: "POST",
-        url: NN_URL,
-        data: reqData,
-        success: function (data) {
-            console.log(data);
-            displayResponse(data);
-        }
-    });
+    if (changed) {
+        changed = false;
+        $("#loading").show();
+        var imageData = $("#canvasStage")[0].getContext("2d").getImageData(0,0,224,224);
+        imageData = scaleImage(imageData);
+        var normAlphaData = normalize(convertToGreyscale(imageData));
+        var reqData = {
+            pixels: normAlphaData
+        };
+        console.log(reqData);
+        $.ajax({
+            method: "POST",
+            url: NN_URL,
+            data: reqData,
+            success: function (data) {
+                console.log(data);
+                displayResponse(data);
+            }
+        });
+    }
 }
 
 function clearCanvas() {
     $("#reply").hide();
+    $("#loading").hide();
 
     oldX = undefined;
     oldY = undefined;
@@ -92,6 +101,7 @@ function clearCanvas() {
 }
 
 function displayResponse(data) {
+    $("#loading").hide();
     $("#digit").text(data);
     $("#reply").fadeIn();
 }
@@ -111,17 +121,21 @@ function scaleImage(imageData) {
     return destCtx.getImageData(0, 0, 28, 28);
 }
 
-function getAlphas(imageData) {
+function convertToGreyscale(imageData) {
     var pixels = imageData.data;
 
-    var alphas = [];
+    var greyscale = [];
 
     // Loop over each pixel and invert the color.
     for (var i = 0; i < pixels.length; i += 4) {
-        alphas.push(pixels[i+3]);
-        // i+3 is alpha (the fourth element)
+        var val = 0;
+        if (pixels[i] != 0) {
+            val = 255 - (0.34 * pixels[i] + 0.5 * pixels[i + 1] + 0.16 * pixels[i + 2]);
+        }
+        greyscale.push(val);
+        // average of colors is greycsale
     }
-    return alphas;
+    return greyscale;
 }
 
 function normalize(data) {
