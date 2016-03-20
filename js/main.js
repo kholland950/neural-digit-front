@@ -10,6 +10,8 @@ var oldX, oldY;
 var color = "#111";
 var size = 25;
 
+var NN_URL = "url here";
+
 function init() {
     $('.button-collapse').sideNav();
 
@@ -66,15 +68,18 @@ function submitDigit() {
     console.log(reqData);
     $.ajax({
         method: "POST",
-        url: "http://10.32.24.67:8090/",
+        url: NN_URL,
         data: reqData,
         success: function (data) {
-            displayAnswer(data);
+            console.log(data);
+            displayResponse(data);
         }
     });
 }
 
 function clearCanvas() {
+    $("#reply").hide();
+
     oldX = undefined;
     oldY = undefined;
     //clear easeljs canvas
@@ -86,8 +91,9 @@ function clearCanvas() {
     ctx.clearRect(0, 0, 224, 224);
 }
 
-function displayAnswer(data) {
-
+function displayResponse(data) {
+    $("#digit").text(data);
+    $("#reply").fadeIn();
 }
 
 function scaleImage(imageData) {
