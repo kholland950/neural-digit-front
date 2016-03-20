@@ -10,7 +10,7 @@ var oldX, oldY;
 var color = "#111";
 var size = 25;
 
-var NN_URL = "url here";
+var NN_URL = "http://addison.duckdns.org:8090/";
 
 function init() {
     $('.button-collapse').sideNav();
